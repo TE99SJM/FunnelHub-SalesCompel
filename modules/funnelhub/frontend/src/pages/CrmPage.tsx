@@ -51,9 +51,9 @@ export default function CrmPage({ accounts = false }: { accounts?: boolean }) {
       <button className="btn btn-primary" disabled={busy}>Save account</button><button className="btn" type="button" onClick={() => setEditing(null)}>Cancel</button>
     </form>}
     {busy && <p role="status">Loading CRM…</p>}
-    <div className="card table-wrap"><table className="table"><thead><tr><th>Name</th><th>{accounts ? "Note" : "Email"}</th><th>CRM ID</th>{accounts && <th>Actions</th>}</tr></thead>
-      <tbody>{rows.map(row => <tr key={row.Id}><td data-label="Name">{row.Name || `${row.FirstName || ""} ${row.LastName || ""}`}</td><td data-label={accounts ? "Note" : "Email"}>{accounts ? row.Compat_Text__c : row.Email__c}</td><td data-label="CRM ID">{row.Id}</td>
-        {accounts && <td data-label="Actions"><button className="btn" onClick={() => {setEditing(row.Id); setName(row.Name || ""); setNote(row.Compat_Text__c || "");}}>Edit</button></td>}</tr>)}</tbody></table>
+    <div className="card table-wrap"><table className="table" role="table"><thead role="rowgroup"><tr role="row"><th role="columnheader">Name</th><th role="columnheader">{accounts ? "Note" : "Email"}</th><th role="columnheader">CRM ID</th>{accounts && <th role="columnheader">Actions</th>}</tr></thead>
+      <tbody role="rowgroup">{rows.map(row => <tr role="row" key={row.Id}><td role="cell" data-label="Name">{row.Name || `${row.FirstName || ""} ${row.LastName || ""}`}</td><td role="cell" data-label={accounts ? "Note" : "Email"}>{accounts ? row.Compat_Text__c : row.Email__c}</td><td role="cell" data-label="CRM ID">{row.Id}</td>
+        {accounts && <td role="cell" data-label="Actions"><button className="btn" onClick={() => {setEditing(row.Id); setName(row.Name || ""); setNote(row.Compat_Text__c || "");}}>Edit</button></td>}</tr>)}</tbody></table>
       {!busy && !error && !rows.length && <p>No records yet.</p>}</div>
     <p className="muted small">Early test integration · one owner workspace · first 2,000 CRM records shown.</p>
   </div>;

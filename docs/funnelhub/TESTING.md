@@ -65,3 +65,11 @@ node web/node_modules/playwright/cli.js install --with-deps chromium webkit
 ```
 
 This script refuses an application with an existing owner. It creates synthetic accounts/contacts/media/drafts and requires publishing/public media to be off. Do not use it for an established workspace.
+
+## Inherited CI dependency repair
+
+The first fork CI run reproduced `EBADPLATFORM` before the upstream compatibility checks: the locked nested `@unrs/resolver-binding-linux-x64-musl` package lacked its optional flag. Both GNU and musl variants are declared optional by their parent `unrs-resolver`; the lockfile now records that metadata for both. Versions and integrity hashes are unchanged. `npm ci --ignore-scripts` passed locally after the two-line correction. This change affects compatibility-lab installation only, not the Go engine or application runtime.
+
+## First Docker/browser CI result
+
+[Initial isolated CI run](https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/43118076524) passed the 83 backend tests, image build, healthy Compose startup, CRM/account/contact checks, media/draft API checks and the complete Chromium desktop browser test. The WebKit iPhone test reached account creation but timed out finding the table cell; responsive `display` rules can remove implicit table accessibility semantics in WebKit. CRM table roles are now explicit and the browser test checks the account-create HTTP result and retains failure evidence. The rerun must pass before mobile/browser/restart acceptance is reported as complete.
