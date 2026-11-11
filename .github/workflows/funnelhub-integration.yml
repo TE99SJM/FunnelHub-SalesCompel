@@ -1,0 +1,39 @@
+name: FunnelHub isolated integration
+on:
+  pull_request:
+  push:
+    branches: [integration/funnelhub]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r modules/funnelhub/backend/requirements.lock
+      - name: Reused providers and integration regressions (mocks only)
+        working-directory: modules/funnelhub/backend
+        run: python -m pytest -q
+      - run: npm ci --prefix web --ignore-scripts
+      - run: node web/node_modules/playwright/cli.js install --with-deps chromium webkit
+      - run: python scripts/funnelhub/prepare_env.py
+      - name: Build and start separate Docker stack
+        run: docker compose -p funnelhub-salescompel-test -f compose.test.yml up -d --build --wait --wait-timeout 240
+      - name: Browser, API, database and container restart acceptance
+        run: python scripts/funnelhub/acceptance_stack.py --disposable-test-stack --browser-script scripts/funnelhub/browser_acceptance.cjs --restart --out /tmp/fh-results/stack.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: funnelhub-test-results
+          path: /tmp/fh-results
+          if-no-files-found: warn
+      - name: Remove only this runner's disposable test stack
+        if: always()
+        run: docker compose -p funnelhub-salescompel-test -f compose.test.yml down -v

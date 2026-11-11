@@ -1,0 +1,157 @@
+"""One-workspace SalesCompel adapter. CRM credentials never enter the browser.
+
+Legacy contact IDs remain relationship anchors. A transactional projection queue
+copies their core fields to SalesCompel and recovers remote creates after crashes.
+"""
+import asyncio
+import hashlib
+import json
+import os
+import threading
+import uuid
+from urllib.parse import quote
+
+import httpx
+from fastapi import HTTPException
+from sqlalchemy import Boolean, Integer, String, Text, event, select
+from sqlalchemy.orm import Mapped, mapped_column
+
+from .database import Base, SessionLocal
+from .models import Contact
+
+
+class CRMProjection(Base):
+    __tablename__ = "crm_projections"
+    # No FK: a tombstone must survive deletion of its source contact.
+    contact_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
+    source_key: Mapped[str] = mapped_column(String(36), unique=True)
+    crm_id: Mapped[str] = mapped_column(String(18), default="")
+    payload: Mapped[str] = mapped_column(Text, default="{}")
+    pending: Mapped[bool] = mapped_column(Boolean, default=True)
+    deleted: Mapped[bool] = mapped_column(Boolean, default=False)
+    error: Mapped[str] = mapped_column(Text, default="")
+
+
+def configured() -> bool:
+    return bool(os.getenv("SALESCOMPEL_URL") and os.getenv("SALESCOMPEL_TOKEN"))
+
+
+def request(method: str, path: str, *, data=None, params=None):
+    if not configured():
+        raise HTTPException(503, "CRM engine is not configured")
+    try:
+        # Only a server-configured URL is used. Do not forward caller headers,
+        # URLs, redirects, cookies or the browser bearer token.
+        with httpx.Client(timeout=20, trust_env=False, follow_redirects=False) as client:
+            res = client.request(method, os.environ["SALESCOMPEL_URL"].rstrip("/") +
+                                 "/services/data/v65.0/" + path,
+                                 headers={"Authorization": "Bearer " + os.environ["SALESCOMPEL_TOKEN"]},
+                                 json=data, params=params)
+    except httpx.HTTPError as exc:
+        raise HTTPException(503, "CRM engine is unavailable; retry when it is healthy") from exc
+    if not res.is_success:
+        # Do not echo upstream responses/URLs that could contain private data.
+        code = "CRM_REQUEST_FAILED"
+        try:
+            body = res.json()
+            item = body[0] if isinstance(body, list) and body else body
+            candidate = item.get("errorCode", "") if isinstance(item, dict) else ""
+            if candidate and candidate.replace("_", "").isalnum():
+                code = candidate[:80]
+        except ValueError:
+            pass
+        raise HTTPException(res.status_code if 400 <= res.status_code < 500 else 502,
+                            f"CRM request rejected ({code}); check field values or engine configuration")
+    return None if res.status_code == 204 else res.json()
+
+
+def _enqueue(connection, contact, deleted=False):
+    table = CRMProjection.__table__
+    values = dict(payload=json.dumps({"FirstName": contact.first_name or "",
+                                      "LastName": contact.last_name or contact.first_name or "Contact",
+                                      "Email__c": contact.email or "", "Phone__c": contact.phone or "",
+                                      "company": contact.company or ""}),
+                  pending=True, deleted=deleted, error="")
+    exists = connection.execute(select(table.c.contact_id).where(table.c.contact_id == contact.id)).first()
+    if exists:
+        connection.execute(table.update().where(table.c.contact_id == contact.id).values(**values))
+    else:
+        connection.execute(table.insert().values(contact_id=contact.id, source_key=str(uuid.uuid4()),
+                                                  crm_id="", **values))
+
+
+@event.listens_for(Contact, "after_insert")
+@event.listens_for(Contact, "after_update")
+def queue_contact(mapper, connection, target):
+    _enqueue(connection, target)
+
+
+@event.listens_for(Contact, "after_delete")
+def queue_deleted_contact(mapper, connection, target):
+    _enqueue(connection, target, True)
+
+
+_worker_lock = threading.Lock()
+
+
+def sync_pending(limit=100):
+    if not configured() or not _worker_lock.acquire(blocking=False):
+        return {"synced": 0, "failed": 0}
+    synced = failed = 0
+    try:
+        with SessionLocal() as db:
+            ids = list(db.scalars(select(CRMProjection.contact_id).where(CRMProjection.pending.is_(True))
+                                 .order_by(CRMProjection.contact_id).limit(limit)))
+        for cid in ids:
+            with SessionLocal() as db:
+                row = db.scalar(select(CRMProjection).where(CRMProjection.contact_id == cid).with_for_update())
+                if not row or not row.pending:
+                    continue
+                try:
+                    # Recover remote success when a previous process died before
+                    # saving its mapping. UUID is generated by us, not user SOQL.
+                    if not row.crm_id:
+                        q = f"SELECT Id FROM Contact WHERE FunnelHub_Key__c = '{row.source_key}' LIMIT 2"
+                        matches = request("GET", "query", params={"q": q})["records"]
+                        if len(matches) > 1:
+                            raise HTTPException(409, "Duplicate CRM source keys require manual reconciliation")
+                        if matches:
+                            row.crm_id = matches[0]["Id"]
+                    if row.deleted:
+                        if row.crm_id:
+                            try:
+                                request("DELETE", f"sobjects/Contact/{row.crm_id}")
+                            except HTTPException as exc:
+                                if exc.status_code != 404:
+                                    raise
+                    else:
+                        payload = json.loads(row.payload)
+                        company = payload.pop("company")
+                        payload["AccountId"] = None
+                        if company:
+                            key = "fh-company-" + hashlib.sha256(company.casefold().strip().encode()).hexdigest()
+                            path = "sobjects/Account/Compat_Key__c/" + quote(key, safe="")
+                            payload["AccountId"] = request("PATCH", path, data={"Name": company})["id"]
+                        payload["FunnelHub_Key__c"] = row.source_key
+                        if row.crm_id:
+                            request("PATCH", f"sobjects/Contact/{row.crm_id}", data=payload)
+                        else:
+                            row.crm_id = request("POST", "sobjects/Contact", data=payload)["id"]
+                    row.pending, row.error = False, ""
+                    synced += 1
+                except HTTPException as exc:
+                    row.error = str(exc.detail)[:300]
+                    failed += 1
+                except Exception:
+                    row.error = "Projection failed; check engine configuration and retry"
+                    failed += 1
+                db.commit()
+    finally:
+        _worker_lock.release()
+    return {"synced": synced, "failed": failed}
+
+
+async def projection_loop():
+    while True:
+        await asyncio.to_thread(sync_pending)
+        await asyncio.sleep(15)

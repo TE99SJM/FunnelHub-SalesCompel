@@ -12,3 +12,13 @@ compat/private/
 web/dist/
 web/test-results/
 web/playwright-report/
+
+modules/funnelhub/frontend/dist/
+modules/funnelhub/frontend/*.tsbuildinfo
+**/.pytest_cache/
+**/data/
+**/*.db
+**/*.db-*
+**/test-results/
+**/playwright-report/
+.secrets/
