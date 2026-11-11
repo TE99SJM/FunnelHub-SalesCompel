@@ -5,7 +5,7 @@ import pytest
 
 _tmp = tempfile.mkdtemp()
 os.environ["DATA_DIR"] = _tmp
-os.environ["DATABASE_URL"] = f"sqlite:///{_tmp}/test.db"
+os.environ["DATABASE_URL"] = os.getenv("FUNNELHUB_TEST_DATABASE_URL", f"sqlite:///{_tmp}/test.db")
 os.environ["SYNC_SCHEDULER"] = "false"
 os.environ["EXTERNAL_PUBLISH_ENABLED"] = "true"  # Tests mock all publishers.
 os.environ["PUBLIC_MEDIA_ENABLED"] = "true"

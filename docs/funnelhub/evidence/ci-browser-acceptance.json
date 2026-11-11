@@ -1,0 +1,35 @@
+{
+  "results": [
+    {
+      "browser": "chromium-desktop",
+      "status": "passed",
+      "checks": [
+        "login",
+        "navigation",
+        "responsive width",
+        "account create",
+        "native filechooser event",
+        "multipart upload",
+        "draft save/reload",
+        "publishing disabled"
+      ]
+    },
+    {
+      "browser": "webkit-iphone",
+      "status": "passed",
+      "checks": [
+        "login",
+        "navigation",
+        "responsive width",
+        "account create",
+        "native filechooser event",
+        "multipart upload",
+        "draft save/reload",
+        "publishing disabled"
+      ]
+    }
+  ],
+  "physical_iphone_tested": false,
+  "source_commit": "087ed5b4dae4c0a76fdcfb8ceeee4c9e80f7a374",
+  "workflow_run": 43118870378
+}

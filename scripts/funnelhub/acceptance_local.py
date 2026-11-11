@@ -24,6 +24,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--postgres-bin", type=Path, required=True)
 parser.add_argument("--salescompel-bin", type=Path, required=True)
 parser.add_argument("--go-bin", type=Path)
+parser.add_argument("--provider-suite", action="store_true", help="Run mocked backend regressions against the disposable PostgreSQL schema")
 parser.add_argument("--browser-script", type=Path)
 parser.add_argument("--out", type=Path, required=True)
 args = parser.parse_args()
@@ -97,6 +98,25 @@ with tempfile.TemporaryDirectory(prefix="funnelhub-acceptance-") as tmp:
                        SALESCOMPEL_URL=f"http://127.0.0.1:{crmport}", DATA_DIR=str(temp / "media"),
                        FRONTEND_DIST=str(ROOT / "modules/funnelhub/frontend/dist"), SYNC_SCHEDULER="false",
                        EXTERNAL_PUBLISH_ENABLED="false", PUBLIC_MEDIA_ENABLED="false", ALLOW_DEMO_SEED="false")
+
+        if args.provider_suite:
+            test_env = dict(app_env, FUNNELHUB_TEST_DATABASE_URL=app_env["DATABASE_URL"],
+                            SALESCOMPEL_URL="", SALESCOMPEL_TOKEN="", ALLOW_DEMO_SEED="true")
+            result = subprocess.run([sys.executable, "-m", "pytest", "-q"],
+                                    cwd=ROOT / "modules/funnelhub/backend", env=test_env,
+                                    capture_output=True, text=True)
+            summary = next((line for line in reversed(result.stdout.splitlines()) if "passed" in line), "No passing summary")
+            if result.returncode:
+                detail = result.stdout + result.stderr
+                for key in ("RECORDS_PASSWORD", "IDENTITY_PASSWORD", "MARKETING_PASSWORD", "SALESCOMPEL_TOKEN", "SECRET_KEY"):
+                    detail = detail.replace(env[key], "[REDACTED]")
+                (args.out.parent / "provider-test-failures.txt").write_text(detail)
+                raise AssertionError("Mocked provider regressions failed on PostgreSQL; see provider-test-failures.txt")
+            passed("Mocked backend suite on PostgreSQL: " + summary)
+            # The suite used only this new private schema, before any app runs.
+            with psycopg.connect(env["MIGRATION_DATABASE_URL"], autocommit=True) as c:
+                c.execute("DROP SCHEMA funnelhub CASCADE")
+                c.execute("CREATE SCHEMA funnelhub AUTHORIZATION fh_marketing")
 
         def start_apps():
             crm = subprocess.Popen([str(args.salescompel_bin), "serve", "--addr", f"127.0.0.1:{crmport}", "--assets", ""], env=crm_env, stdout=logfile, stderr=logfile)

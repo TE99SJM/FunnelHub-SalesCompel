@@ -222,7 +222,7 @@ export default function ComposePage() {
       )}
 
       {!canPublish && <p className="callout">Publishing is disabled in this test stack. Upload media and save drafts safely.</p>}
-      <section className="card"><h2>Saved drafts</h2><p className="muted small">Text, media and destinations persist. Review platform privacy/consent options again before publishing.</p>
+      <section className="card saved-drafts"><h2>Saved drafts</h2><p className="muted small">Text, media and destinations persist. Review platform privacy/consent options again before publishing.</p>
         {drafts.map(d => <button key={d.id} className="btn" onClick={() => openDraft(d.id)}>{d.title || d.text.slice(0,40) || `Draft ${d.id}`}</button>)}
         {!drafts.length && <p>No saved drafts yet.</p>}
       </section>
@@ -255,7 +255,7 @@ export default function ComposePage() {
             <div className="media-grid">
               {files.map((f) => (
                 <div key={f.key} className="media-tile">
-                  {!f.preview ? <div className="muted">Saved {f.media?.kind || "media"}</div> : isVideo(f.file)
+                  {!f.preview ? <div className="saved-media-preview muted">Saved {f.media?.kind || "media"}</div> : isVideo(f.file)
                     ? <video src={f.preview} muted onLoadedMetadata={(e) => markVertical(f.key, e.currentTarget.videoWidth, e.currentTarget.videoHeight, e.currentTarget.duration)} />
                     : <img src={f.preview} alt={f.file.name} />}
                   <div className="media-meta small">

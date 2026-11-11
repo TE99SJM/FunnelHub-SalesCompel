@@ -1,6 +1,6 @@
 # Separate test deployment on mserver
 
-This runbook creates a **new** stack. It does not update `funnelhub-crm`, the Oneshot-CRM checkout, or its volumes. The agent did not have a session on mserver, so deployment and production health have not been verified there. Complete one step, confirm it worked, then continue.
+This runbook creates a **new** stack. It does not update `funnelhub-crm`, the Oneshot-CRM checkout, or its volumes. Docker startup/browser/restart tests passed in GitHub CI. The agent could not resolve mserver from this workspace and had no server session, so deployment and production health have not been verified there. Complete one step, confirm it worked, then continue.
 
 Prerequisites: Ubuntu, Git, Python 3, Docker Engine and Docker Compose v2 with `depends_on.condition` and `--wait` support. No GPU is required. Keep the port on loopback until the owner account exists. Use a private SSH tunnel or an authenticated HTTPS reverse proxy for access; native iPhone installation/OAuth callbacks require a suitable HTTPS origin.
 

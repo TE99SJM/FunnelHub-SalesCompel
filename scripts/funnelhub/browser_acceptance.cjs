@@ -26,11 +26,11 @@ const pw = require(process.env.PLAYWRIGHT_MODULE || path.resolve(__dirname, "../
       await page.getByLabel("Password", {exact:true}).fill(process.env.FH_TEST_PASSWORD);
       await page.getByRole("button",{name:"Sign in",exact:true}).click();
       await page.getByRole("heading",{name:"Dashboard",exact:true}).waitFor();
-      for (const destination of ["accounts", "contacts", "channels", "content", "media", "emails", "orders", "analytics", "automations", "settings"]) {
+      for (const destination of ["accounts", "contacts", "channels", "content", "compose", "media", "emails", "orders", "analytics", "automations", "settings"]) {
         await page.goto(`${url}/${destination}`);
         await page.locator("h1").first().waitFor();
-        const width = await page.evaluate(() => ({screen:innerWidth,content:document.documentElement.scrollWidth}));
-        assert(width.content <= width.screen + 2, `${label} ${destination} overflows: ${JSON.stringify(width)}`);
+        const width = await page.evaluate(() => ({screen:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+        assert(width.content <= page.viewportSize().width + 2, `${label} ${destination} overflows: ${JSON.stringify(width)}`);
       }
       await page.goto(`${url}/accounts`);
       await page.getByRole("button",{name:"New account",exact:true}).click();
@@ -55,6 +55,8 @@ const pw = require(process.env.PLAYWRIGHT_MODULE || path.resolve(__dirname, "../
       await page.getByRole("button",{name:`Saved from ${label}`,exact:true}).click();
       assert.equal(await page.getByTestId("compose-text").inputValue(), `Saved from ${label}`);
       await page.getByText("Saved image",{exact:true}).waitFor();
+      const composerWidth = await page.evaluate(() => ({screen:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+      assert(composerWidth.content <= page.viewportSize().width + 2, `${label} saved composer overflows: ${JSON.stringify(composerWidth)}`);
       if (mobile) await page.screenshot({path:path.join(out, "funnelhub-iphone.png"),fullPage:true});
       assert.deepEqual(errors, [], `${label} runtime errors`);
       results.push({browser:label,status:"passed",checks:["login","navigation","responsive width","account create","native filechooser event","multipart upload","draft save/reload","publishing disabled"]});

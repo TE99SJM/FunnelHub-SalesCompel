@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "check": "PostgreSQL initialization and repeat initialization",
+      "status": "passed"
+    },
+    {
+      "check": "Mocked backend suite on PostgreSQL: 83 passed, 1 warning in 18.64s",
+      "status": "passed"
+    },
+    {
+      "check": "App and original SalesCompel engine start with restricted database roles",
+      "status": "passed"
+    },
+    {
+      "check": "Owner setup/login, authentication and setup lockout",
+      "status": "passed"
+    },
+    {
+      "check": "Account CRUD and contact projection with company link and no duplicate retry",
+      "status": "passed"
+    },
+    {
+      "check": "Native multipart media, private delivery and publication gate",
+      "status": "passed"
+    },
+    {
+      "check": "Empty social/analytics states use real database, no fabricated metrics",
+      "status": "passed"
+    },
+    {
+      "check": "Both processes restart; CRM contacts/accounts, login, drafts and media persist",
+      "status": "passed"
+    }
+  ],
+  "production_accessed": false,
+  "live_providers_tested": false
+}

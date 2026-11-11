@@ -2,7 +2,7 @@
 
 ## Release blockers
 
-1. Run the Docker/browser workflow and verify its result. This workspace cannot launch browsers because Unix-domain socket creation is denied; Docker is unavailable here. Source builds and real non-Docker PostgreSQL/runtime tests pass, but they do not prove Docker build/restart or UI behavior.
+1. Confirm the latest fork checks before merging, including the added composer-width assertions and inherited compatibility workflow Go-version repair. The integrated Docker, desktop/WebKit and restart checks passed in CI; reference-org parity is not certified.
 2. Test the separate stack on mserver and on a physical iPhone. Verify owner setup, native Files/Photos selection, large MOV uploads, touch layout, restart and no interference with the existing container. A browser-emulated iPhone is not a physical-device test.
 3. Reconnect sandbox/test providers and verify actual grants. Existing tests mock external API/IMAP responses. YouTube/TikTok/Meta app reviews, scopes, quota, account eligibility and OAuth redirect correctness remain unverified. No live Gmail or Square account was accessed.
 4. Rehearse a versioned production importer and reconciliation/restore procedure. Only a read-only assessment tool exists. No production token/data migration is complete.

@@ -277,7 +277,7 @@ textarea { resize: vertical; }
 .job-targets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .job-targets li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .job-targets li > div { flex-basis: 100%; }
-@media (max-width: 900px) { .compose-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .compose-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---- Dashboard period + full-screen stat charts ---- */
 .period-picker select { min-width: 150px; }
@@ -550,7 +550,7 @@ html { -webkit-text-size-adjust: 100%; }
   .back-btn { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 6px 0 0; border: 0; background: none; color: var(--primary); font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; }
 
   /* compose */
-  .compose-grid { grid-template-columns: 1fr; }
+  .compose-grid { grid-template-columns: minmax(0, 1fr); }
   .dropzone { padding: 28px 16px; font-size: 17px; }
   .target { padding: 14px; font-size: 17px; gap: 12px; border-radius: 14px; }
   .job-actions { margin-left: 0; width: 100%; }
@@ -621,3 +621,10 @@ html { -webkit-text-size-adjust: 100%; }
 .stack { display: flex; flex-direction: column; gap: 12px; }
 .card h2 { overflow-wrap: anywhere; }
 @media (max-width: 700px) { .integration-banner { padding: 8px 16px; } }
+
+/* Native media controls and scheduling controls must shrink inside mobile grids. */
+.compose-grid > *, .compose-side > *, .compose-main > label { min-width: 0; }
+.compose-main input[type=file], .compose-main select { width: 100%; max-width: 100%; min-width: 0; }
+.saved-drafts .btn { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: left; margin: 4px; }
+.saved-media-preview { display: grid; place-items: center; min-height: 140px; background: var(--surface-2); border-radius: 6px; padding: 8px; }
+.media-meta > .muted { white-space: nowrap; flex-shrink: 0; }
