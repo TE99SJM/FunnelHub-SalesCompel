@@ -30,7 +30,7 @@ Sanitized acceptance summaries are in `docs/funnelhub/evidence/`. No raw credent
 - Docker is unavailable locally; image build, Compose lifecycle and restart were exercised successfully in GitHub CI. Portainer and the actual server remain unverified. Inspect the PR's latest result before merging.
 - All live social/Gmail/Square/GA4 operations: no credentials or sandbox accounts were supplied. Reused mocked tests prove response handling only.
 - mserver deployment, old-container health and actual legacy migration: no server session or production volumes were accessed. The original repository and installation were not changed.
-- Salesforce reference-org certification was not run. Offline compatibility CI initially reached 456 passes, one failure and six skips: its inherited workflow used Go 1.24 against a Go 1.25 fixture. The workflow now selects Go from go.mod; inspect its rerun. Local offline tests also encountered proxy/PATH/Unix-socket limitations; correcting proxy/PATH recovered eight failures. These are not live Salesforce parity results.
+- Salesforce reference-org certification was not run. Offline compatibility CI initially reached 456 passes, one failure and six skips: its inherited workflow used Go 1.24 against a Go 1.25 fixture. The workflow now selects Go from go.mod; its Node 22 rerun passed. The separate full candidate workflow also passed all required gates. Local offline tests also encountered proxy/PATH/Unix-socket limitations; correcting proxy/PATH recovered eight failures. These are not live Salesforce parity results.
 
 ## Reproduce local API/database tests
 
@@ -81,8 +81,12 @@ The first fork CI run reproduced `EBADPLATFORM` before the upstream compatibilit
 
 ## Verified CI evidence
 
-[Passing isolated Docker/browser/restart run](https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/43118870378), application revision `087ed5b4dae4c0a76fdcfb8ceeee4c9e80f7a374`, passed all workflow steps. Sanitized `stack.json` and `browser-acceptance.json` are retained under evidence. This supersedes the initial WebKit table-lookup failure above. The result verifies browser emulation and synthetic operations, not real device or provider authorization.
+[Passing isolated Docker/browser/restart run](https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/43119845798), application revision `bb5725368b89b45546efd775663530e318dfcdf7`, passed all workflow steps. Sanitized `stack.json` and `browser-acceptance.json` are retained under evidence. This supersedes the initial WebKit table-lookup failure above. The result verifies browser emulation and synthetic operations, not real device or provider authorization.
 
-Screenshot review then identified additional composer horizontal overflow beyond the original navigation-width coverage. The layout now bounds native select/file controls and uses shrinkable grid columns, and the browser suite explicitly checks composer width before upload and after saved-draft reload. Consult the latest integration workflow result for these additional assertions.
+Screenshot review then identified additional composer horizontal overflow beyond the original navigation-width coverage. The layout now bounds native select/file controls and uses shrinkable grid columns, and the browser suite explicitly checks composer width before upload and after saved-draft reload. These additional assertions passed in the linked latest run. The final screenshot is 390 CSS pixels wide at a 3x device scale (1,170 PNG pixels); it was visually reviewed.
 
 The optional `--provider-suite` local harness runs all 83 mocked provider/backend tests in its newly created PostgreSQL marketing schema before starting the application, then clears only that disposable schema. Do not set `FUNNELHUB_TEST_DATABASE_URL` to any database whose data you want to keep. The default unit suite still uses a fresh temporary SQLite database.
+
+## Upstream full candidate acceptance
+
+[SalesCompel full candidate workflow](https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/43118861782) passed at revision `087ed5b4dae4c0a76fdcfb8ceeee4c9e80f7a374`. Its sanitized native report is retained as `evidence/salescompel-candidate-ci.json`. Passed gates cover database/vet, offline laboratory, original Vue build/units, JSforce, simple-salesforce, Salesforce CLI against the local candidate, OAuth, dynamic schema, restart, connected browser, synthetic preview and cleanup. Six deliberate offline-suite skips are covered by the separate required candidate-client gates. The report's counts include subtests and non-test gates; do not sum them into an inflated test count. This is candidate acceptance, not proof of parity with a live Salesforce reference organization.
