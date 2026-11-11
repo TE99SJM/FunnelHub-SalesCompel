@@ -1,0 +1,6 @@
+{
+  "check": "read-only legacy assessor synthetic snapshot",
+  "status": "passed",
+  "source_unchanged": true,
+  "production_accessed": false
+}
