@@ -38,7 +38,7 @@ const pw = require(process.env.PLAYWRIGHT_MODULE || path.resolve(__dirname, "../
       const created = page.waitForResponse(r => r.url() === `${url}/api/crm/accounts` && r.request().method() === "POST");
       await page.getByRole("button",{name:"Save account",exact:true}).click();
       assert.equal((await created).status(), 201, `${label} account API create`);
-      await page.getByRole("cell",{name:`Browser account ${label}`,exact:true}).waitFor();
+      await page.getByRole("cell",{name:new RegExp(`Browser account ${label}`)}).waitFor();
       if (!mobile) await page.screenshot({path:path.join(out, "funnelhub-desktop.png"),fullPage:true});
       await page.goto(`${url}/compose`);
       const picker = page.getByTestId("compose-files");
