@@ -1,3 +1,23 @@
+# FunnelHub + SalesCompel — integration preview
+
+This branch combines the original SalesCompel CRM engine with the existing FunnelHub marketing application. **Test-only; not ready to replace production.** Main remains the upstream SalesCompel baseline until acceptance is complete.
+
+- [Architecture and compatibility assessment](docs/funnelhub/ARCHITECTURE.md)
+- [Feature evidence matrix](docs/funnelhub/FEATURE_MATRIX.md)
+- [Separate test deployment on mserver](docs/funnelhub/DEPLOYMENT.md)
+- [Migration assessment and rollback](docs/funnelhub/MIGRATION.md)
+- [Executed tests and remaining acceptance gates](docs/funnelhub/TESTING.md)
+- [Known issues and development priorities](docs/funnelhub/KNOWN_ISSUES.md)
+- [Reused FunnelHub provenance](modules/funnelhub/PROVENANCE.md)
+
+Single owner login, SalesCompel accounts and a durable contact projection, existing social/provider workflows, a persistent media library and composer drafts. One PostgreSQL database with separate schemas and roles. External publication, public media URLs and scheduled provider synchronization default off. No production data or credentials are included.
+
+The upstream source and Apache-2.0 notices remain intact. Reused FunnelHub modules have separate provenance and no declared general source license; see the licensing assessment before redistribution.
+
+---
+
+## Original upstream README
+
 # SalesCompel
 
 An open-source, free-to-use Salesforce replacement project, with an initial tenant-isolated Go/PostgreSQL candidate and Vue record workflow.

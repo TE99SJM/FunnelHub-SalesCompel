@@ -1,0 +1,7 @@
+{
+  "check": "upstream Go tests",
+  "status": "passed",
+  "pass": 572,
+  "fail": 0,
+  "skip": 0
+}

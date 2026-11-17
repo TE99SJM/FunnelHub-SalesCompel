@@ -1,0 +1,16 @@
+.git
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/data
+**/dist
+**/*.db
+**/*.db-*
+.env
+.env.*
+.secrets
+compat
+docs
+web
+funnelhub-source

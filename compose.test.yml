@@ -1,0 +1,77 @@
+name: ${COMPOSE_PROJECT_NAME:-funnelhub-salescompel-test}
+x-logs: &logs
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+services:
+  db:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: funnelhub_test
+      POSTGRES_INITDB_ARGS: "--locale=en_US.utf8 --encoding=UTF8"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run prepare_env.py}
+    volumes:
+      - test-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d funnelhub_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging: *logs
+  init:
+    build: .
+    image: funnelhub-salescompel:test
+    command: ["python", "/app/deploy/bootstrap.py"]
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MIGRATION_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/funnelhub_test?sslmode=disable
+      RECORDS_PASSWORD: ${RECORDS_PASSWORD:?Run prepare_env.py}
+      IDENTITY_PASSWORD: ${IDENTITY_PASSWORD:?Run prepare_env.py}
+      MARKETING_PASSWORD: ${MARKETING_PASSWORD:?Run prepare_env.py}
+      SALESCOMPEL_TOKEN: ${SALESCOMPEL_TOKEN:?Run prepare_env.py}
+      SALESCOMPEL_TENANT: funnelhub
+      SALESCOMPEL_USER: funnelhub-owner
+      SALESCOMPEL_ROLE: admin
+    logging: *logs
+  app:
+    build: .
+    image: funnelhub-salescompel:test
+    restart: unless-stopped
+    init: true
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    ports:
+      - "${FUNNELHUB_BIND:-127.0.0.1}:${FUNNELHUB_PORT:-3051}:8000"
+    environment:
+      APP_NAME: FunnelHub
+      DATA_DIR: /data
+      FRONTEND_DIST: /app/frontend/dist
+      DATABASE_URL: postgresql+psycopg://fh_marketing:${MARKETING_PASSWORD}@db:5432/funnelhub_test
+      CRM_DATABASE_URL: postgresql://fh_records:${RECORDS_PASSWORD}@db:5432/funnelhub_test?sslmode=disable
+      CRM_AUTH_DATABASE_URL: postgresql://fh_identity:${IDENTITY_PASSWORD}@db:5432/funnelhub_test?sslmode=disable
+      SALESCOMPEL_URL: http://127.0.0.1:8080
+      SALESCOMPEL_TOKEN: ${SALESCOMPEL_TOKEN}
+      SECRET_KEY: ${SECRET_KEY:?Run prepare_env.py}
+      ALLOW_DEMO_SEED: "false"
+      SYNC_SCHEDULER: ${SYNC_SCHEDULER:-false}
+      EXTERNAL_PUBLISH_ENABLED: ${EXTERNAL_PUBLISH_ENABLED:-false}
+      PUBLIC_MEDIA_ENABLED: ${PUBLIC_MEDIA_ENABLED:-false}
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-1073741824}
+    volumes:
+      - test-media:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=10)"]
+      interval: 30s
+      timeout: 15s
+      start_period: 30s
+      retries: 3
+    logging: *logs
+volumes:
+  test-postgres:
+  test-media:

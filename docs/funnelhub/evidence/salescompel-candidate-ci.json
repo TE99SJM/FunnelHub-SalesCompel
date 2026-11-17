@@ -1,0 +1,617 @@
+{
+  "schemaVersion": 1,
+  "kind": "candidate-acceptance",
+  "runId": "8bf4daaf8f45fdf50c652d6f",
+  "scope": "full",
+  "outcome": "passed",
+  "acceptanceEligible": true,
+  "startedAt": "2026-11-11T23:20:46.027Z",
+  "finishedAt": "2026-11-11T23:25:02.108Z",
+  "bindings": {
+    "revision": "087ed5b4dae4c0a76fdcfb8ceeee4c9e80f7a374",
+    "source": "ee13baa00a1d2bd137e3b8dae96375f7809f8b31f55f26d43f06ce426fdcf7b6",
+    "clean": true,
+    "locks": {
+      "go.mod": "c4be2b41dd8393669f67c30fc49819fa31703c13f34b4134406b82f6f99f069a",
+      "go.sum": "f63d0eafa82f0367b2f452ebe6d402a33e5db6836e98144b9d84fd5d730dd258",
+      "web/package-lock.json": "5ebbc26f2edc88604d838d4b208a1b10e9344d3c512f0159fd24a4d1c32e8ad1",
+      "compat/clients/node/package-lock.json": "5fc4fc7b601e0e9862b95047a3efc814fc02b0c0af693dd046b5698ef9e0d851",
+      "compat/clients/python/requirements.lock": "1f8a4ab240070fd51587800067da66ef45a035ea2f5a3e34880a4649ac274327",
+      "internal/platform/types.go": "e78ac4391c9fae3dc3c47ebef2f0cd30e094e24a97fd339fd7a990c5dc4f0c0c",
+      "internal/metadata/model.go": "4b8d2d7f102f14f649fb6cb400d3b3d26ec421ccd7408f943d36b3c26add8641",
+      "internal/records/write.go": "05de392f8736b194e132f6f3a29adc81e76d86f57b83106debecb8228c76df4f",
+      "internal/query/select.go": "89de47dc5fafe7dd2d2fad4421e8ab181b8bd711b1f030bbfe623e5ad4adbc3c",
+      "internal/platform/metadata.go": "a5b3c3aacc9788c225d52354be2c4572060528e1457f22b75afb137ae08f5fa6",
+      "internal/migration/migrate.go": "cce7c43ccc96efef5254c5a4b23bd64af6bde9496e6257883a835a38984be87d",
+      "internal/migration/v1.go": "59d0a3d7bc68eab60b7dc1e840ae5dc8399f3486b9fd6b50de9a47f81cd0e918",
+      "internal/migration/migrations/0002_tenant_catalog.sql": "c61f61a4ba3e13c2b89a229c37323049b6f2ddfe7aa28c4ce26cfe4c86f4af51",
+      "internal/migration/migrations/0003_tenant_rls.sql": "e02438664de04b1f495e42e93b1dd513837a345e13941e6372771648b1c19ea9",
+      "internal/platform/catalog_v1.json": "c4d7424d2ee74f09842ff0bdbc8028c021f5c2acf4d4b909ede5c532d71682ad",
+      "internal/platform/schema.sql": "f512007b88dc0a8914c24fcb0ff773cad8bc56639d8b49b50c306f66f1b0a882"
+    },
+    "tools": {
+      "jsforce": "3.11.0",
+      "@salesforce/cli": "2.156.0",
+      "@salesforce/plugin-data": "5.1.16",
+      "@salesforce/plugin-deploy-retrieve": "4.2.15",
+      "simple-salesforce": "1.12.9",
+      "go": "1.25.0",
+      "node": "24.22.2",
+      "python": "3.12.16",
+      "openssl": "3.0.13",
+      "chromium": "141.0.7390",
+      "postgres": "17"
+    },
+    "binary": "dde3ccead5851113dbe3a7a682f7dcd74fce7c984ecf899ed14ecbf147fc7b60",
+    "assets": "1b52f5cdc0e0b2a9c8b1e05aca4ffec814804a2c8e10632768b74e578e8e72dc"
+  },
+  "gates": [
+    {
+      "id": "bindings",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "bindings/source",
+          "bindings/tools",
+          "bindings/artifacts"
+        ],
+        "observedRequired": [
+          "bindings/source",
+          "bindings/tools",
+          "bindings/artifacts"
+        ],
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:22.840Z",
+      "finishedAt": "2026-11-11T23:24:22.840Z"
+    },
+    {
+      "id": "database",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "TestHTTPServedOpenAPI",
+          "TestCompositeAtomic",
+          "TestHTTPCompositeAtomic",
+          "TestCatalogFreshV3",
+          "TestCatalogUpgradeV1",
+          "TestCatalogUpgradeOversizedRollback",
+          "TestCatalogRejectsUnknown",
+          "TestCatalogV3PhysicalMismatch",
+          "TestCatalogConcurrentOpen",
+          "TestHTTPBoundary",
+          "TestHTTPQueryColumns",
+          "TestHTTPQueryColumnsPolicy",
+          "TestHTTPExternalIDPreservesEscapedSlashes",
+          "TestHTTPRejectsUndeliverablePathsAndListings",
+          "TestHTTPCustomFieldLengths",
+          "TestHTTPUpsertBodyValidation",
+          "TestHTTPUpsertBodyBoundaryControls",
+          "TestHTTPOrdinaryExternalIDWrites",
+          "TestStoreIsolationAndPersistence",
+          "TestStoreQueryPolicyAndRelationships",
+          "TestStoreConcurrentUpdatesAndUpsert",
+          "TestStoreBlankNillableStringsAreNull",
+          "TestStoreUpsertBodyValidation",
+          "TestFreshMigration",
+          "TestMigrationHistory",
+          "TestUnmigratedHead",
+          "TestMigrationRejectsUnexplained",
+          "TestMigrationRejectsIdentityDrift",
+          "TestLegacyAdoption",
+          "TestConcurrentMigrate",
+          "TestMigrationResume",
+          "TestMigrationRejectsLegacyPolicies",
+          "TestMigrationRejectsPolicyAtRLSInstall",
+          "TestMigrationRejectsPartialIdentity",
+          "TestLegacyOptionalAuthVersion",
+          "TestSchemaInputRules",
+          "TestTenantCatalogNames",
+          "TestSchemaAtomicDDL",
+          "TestCatalogRejectsUnsupportedEffectiveMetadata",
+          "TestSchemaPrefixAllocation",
+          "TestCatalogConcurrentVisibility",
+          "TestRuntimeRoleRejectsOwner",
+          "TestRoleSeparation",
+          "TestRuntimeLimitedConnections",
+          "TestRLSWithCheck",
+          "TestRLSOmittedTenantPredicate",
+          "TestRuntimeRejectsUnexpectedIdentityGrant",
+          "TestRuntimeRejectsStartupRoleMask",
+          "TestRuntimeRejectsColumnSecretGrant",
+          "TestRuntimeRejectsPrivilegedBuiltinRole",
+          "TestOAuthRuntimeConfidentialIssuance",
+          "TestRuntimeRejectsAppSecurityColumnGrant",
+          "TestDynamicRecords",
+          "TestDynamicCompatKeyIsOrdinaryText",
+          "TestHTTPDynamicCatalog",
+          "TestTenantTxCleanup",
+          "TestExecutionContextFailsClosed",
+          "database/vet"
+        ],
+        "observedRequired": [
+          "TestHTTPServedOpenAPI",
+          "TestCompositeAtomic",
+          "TestHTTPCompositeAtomic",
+          "TestCatalogFreshV3",
+          "TestCatalogUpgradeV1",
+          "TestCatalogUpgradeOversizedRollback",
+          "TestCatalogRejectsUnknown",
+          "TestCatalogV3PhysicalMismatch",
+          "TestCatalogConcurrentOpen",
+          "TestHTTPBoundary",
+          "TestHTTPQueryColumns",
+          "TestHTTPQueryColumnsPolicy",
+          "TestHTTPExternalIDPreservesEscapedSlashes",
+          "TestHTTPRejectsUndeliverablePathsAndListings",
+          "TestHTTPCustomFieldLengths",
+          "TestHTTPUpsertBodyValidation",
+          "TestHTTPUpsertBodyBoundaryControls",
+          "TestHTTPOrdinaryExternalIDWrites",
+          "TestStoreIsolationAndPersistence",
+          "TestStoreQueryPolicyAndRelationships",
+          "TestStoreConcurrentUpdatesAndUpsert",
+          "TestStoreBlankNillableStringsAreNull",
+          "TestStoreUpsertBodyValidation",
+          "TestFreshMigration",
+          "TestMigrationHistory",
+          "TestUnmigratedHead",
+          "TestMigrationRejectsUnexplained",
+          "TestMigrationRejectsIdentityDrift",
+          "TestLegacyAdoption",
+          "TestConcurrentMigrate",
+          "TestMigrationResume",
+          "TestMigrationRejectsLegacyPolicies",
+          "TestMigrationRejectsPolicyAtRLSInstall",
+          "TestMigrationRejectsPartialIdentity",
+          "TestLegacyOptionalAuthVersion",
+          "TestSchemaInputRules",
+          "TestTenantCatalogNames",
+          "TestSchemaAtomicDDL",
+          "TestCatalogRejectsUnsupportedEffectiveMetadata",
+          "TestSchemaPrefixAllocation",
+          "TestCatalogConcurrentVisibility",
+          "TestRuntimeRoleRejectsOwner",
+          "TestRoleSeparation",
+          "TestRuntimeLimitedConnections",
+          "TestRLSWithCheck",
+          "TestRLSOmittedTenantPredicate",
+          "TestRuntimeRejectsUnexpectedIdentityGrant",
+          "TestRuntimeRejectsStartupRoleMask",
+          "TestRuntimeRejectsColumnSecretGrant",
+          "TestRuntimeRejectsPrivilegedBuiltinRole",
+          "TestOAuthRuntimeConfidentialIssuance",
+          "TestRuntimeRejectsAppSecurityColumnGrant",
+          "TestDynamicRecords",
+          "TestDynamicCompatKeyIsOrdinaryText",
+          "TestHTTPDynamicCatalog",
+          "TestTenantTxCleanup",
+          "TestExecutionContextFailsClosed",
+          "database/vet"
+        ],
+        "passed": 573,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:20:47.858Z",
+      "finishedAt": "2026-11-11T23:21:40.002Z"
+    },
+    {
+      "id": "lab",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "core.test.ts::configuration blocks missing credentials/version/ack and unsafe endpoint",
+          "preflight.test.ts::repository validates offline with explicit observation coverage",
+          "candidate-acceptance-contract.test.ts::coverage refuses empty, skipped and incomplete required client results"
+        ],
+        "observedRequired": [
+          "core.test.ts::configuration blocks missing credentials/version/ack and unsafe endpoint",
+          "preflight.test.ts::repository validates offline with explicit observation coverage",
+          "candidate-acceptance-contract.test.ts::coverage refuses empty, skipped and incomplete required client results"
+        ],
+        "passed": 463,
+        "failed": 0,
+        "skipped": 6,
+        "allowedSkipped": [
+          "candidate/composite/atomic",
+          "candidate/foundation/decisions",
+          "candidate/openapi/traffic",
+          "candidate/jsforce/core",
+          "candidate/jsforce/policy",
+          "candidate/jsforce/isolation"
+        ]
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:21:40.002Z",
+      "finishedAt": "2026-11-11T23:24:16.708Z"
+    },
+    {
+      "id": "web",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "i18n.test.ts::language selection preserves aliases, variants and fallback",
+          "preferences.test.ts::only latest async locale selection commits, even when promises resolve backwards",
+          "preferences.test.ts::preferences accept valid values and survive unavailable storage",
+          "preview-store.test.ts::preview stores isolate fixtures and reject invalid references without mutation",
+          "preview-store.test.ts::reset does not reuse record identities retained in browser history",
+          "web/build"
+        ],
+        "observedRequired": [
+          "i18n.test.ts::language selection preserves aliases, variants and fallback",
+          "preferences.test.ts::only latest async locale selection commits, even when promises resolve backwards",
+          "preferences.test.ts::preferences accept valid values and survive unavailable storage",
+          "preview-store.test.ts::preview stores isolate fixtures and reject invalid references without mutation",
+          "preview-store.test.ts::reset does not reuse record identities retained in browser history",
+          "web/build"
+        ],
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:16.708Z",
+      "finishedAt": "2026-11-11T23:24:21.949Z"
+    },
+    {
+      "id": "jsforce",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "candidate/openapi/traffic",
+          "candidate/composite/atomic",
+          "candidate/foundation/decisions",
+          "candidate/jsforce/core",
+          "candidate/jsforce/policy",
+          "candidate/jsforce/isolation"
+        ],
+        "observedRequired": [
+          "candidate/openapi/traffic",
+          "candidate/composite/atomic",
+          "candidate/foundation/decisions",
+          "candidate/jsforce/core",
+          "candidate/jsforce/policy",
+          "candidate/jsforce/isolation"
+        ],
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:22.957Z",
+      "finishedAt": "2026-11-11T23:24:24.513Z"
+    },
+    {
+      "id": "python",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "python/relationship",
+          "python/update",
+          "python/denied",
+          "python/cleanup"
+        ],
+        "observedRequired": [
+          "python/relationship",
+          "python/update",
+          "python/denied",
+          "python/cleanup"
+        ],
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:24.513Z",
+      "finishedAt": "2026-11-11T23:24:24.745Z"
+    },
+    {
+      "id": "cli",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "cli/login",
+          "cli/create",
+          "cli/read",
+          "cli/update",
+          "cli/query",
+          "cli/query-contact",
+          "cli/query-empty",
+          "cli/delete",
+          "cli/absence"
+        ],
+        "observedRequired": [
+          "cli/login",
+          "cli/create",
+          "cli/read",
+          "cli/update",
+          "cli/query",
+          "cli/query-contact",
+          "cli/query-empty",
+          "cli/delete",
+          "cli/absence"
+        ],
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:24.745Z",
+      "finishedAt": "2026-11-11T23:24:32.407Z"
+    },
+    {
+      "id": "oauth",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "oauth/provision",
+          "oauth/sf-web",
+          "oauth/sf-display-connected",
+          "oauth/sf-refresh",
+          "oauth/sf-jwt",
+          "oauth/sf-jwt-unlisted",
+          "oauth/jsforce-web-pkce",
+          "oauth/jsforce-refresh",
+          "oauth/jsforce-jwt",
+          "oauth/jsforce-client-credentials",
+          "oauth/jsforce-revoke",
+          "oauth/python-session",
+          "oauth/restricted-denied",
+          "oauth/tenant-isolation",
+          "oauth/http-contract",
+          "oauth/browser-page"
+        ],
+        "observedRequired": [
+          "oauth/provision",
+          "oauth/sf-web",
+          "oauth/sf-display-connected",
+          "oauth/sf-refresh",
+          "oauth/sf-jwt",
+          "oauth/sf-jwt-unlisted",
+          "oauth/jsforce-web-pkce",
+          "oauth/jsforce-refresh",
+          "oauth/jsforce-jwt",
+          "oauth/jsforce-client-credentials",
+          "oauth/jsforce-revoke",
+          "oauth/python-session",
+          "oauth/restricted-denied",
+          "oauth/tenant-isolation",
+          "oauth/http-contract",
+          "oauth/browser-page"
+        ],
+        "passed": 16,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:32.407Z",
+      "finishedAt": "2026-11-11T23:24:45.268Z"
+    },
+    {
+      "id": "schema",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "schema/provision",
+          "schema/jsforce-discover",
+          "schema/jsforce-describe",
+          "schema/jsforce-crud",
+          "schema/jsforce-query",
+          "schema/account-field",
+          "schema/tenant-isolation",
+          "schema/composite-rollback",
+          "schema/http-contract"
+        ],
+        "observedRequired": [
+          "schema/provision",
+          "schema/jsforce-discover",
+          "schema/jsforce-describe",
+          "schema/jsforce-crud",
+          "schema/jsforce-query",
+          "schema/account-field",
+          "schema/tenant-isolation",
+          "schema/composite-rollback",
+          "schema/http-contract"
+        ],
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:45.268Z",
+      "finishedAt": "2026-11-11T23:24:46.422Z"
+    },
+    {
+      "id": "restart",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "restart/schema",
+          "restart/identity",
+          "restart/values",
+          "restart/policy",
+          "restart/oauth-refresh"
+        ],
+        "observedRequired": [
+          "restart/schema",
+          "restart/identity",
+          "restart/values",
+          "restart/policy",
+          "restart/oauth-refresh"
+        ],
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:46.423Z",
+      "finishedAt": "2026-11-11T23:24:47.071Z"
+    },
+    {
+      "id": "connected-browser",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "connected/dynamic-schema",
+          "connected/dynamic-isolation",
+          "connected/dynamic-stale-response",
+          "connected/admin",
+          "invalid session displays an error without entering records",
+          "connected/restricted",
+          "connected/other-tenant",
+          "connected/locales",
+          "connected/token-boundary",
+          "a failed refresh after save cannot leave a stale actionable record",
+          "a failed refresh after delete cannot leave a stale actionable record"
+        ],
+        "observedRequired": [
+          "connected/dynamic-schema",
+          "connected/dynamic-isolation",
+          "connected/dynamic-stale-response",
+          "connected/admin",
+          "invalid session displays an error without entering records",
+          "connected/restricted",
+          "connected/other-tenant",
+          "connected/locales",
+          "connected/token-boundary",
+          "a failed refresh after save cannot leave a stale actionable record",
+          "a failed refresh after delete cannot leave a stale actionable record"
+        ],
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:47.071Z",
+      "finishedAt": "2026-11-11T23:24:55.690Z"
+    },
+    {
+      "id": "preview",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "routed frame has evidence, history, safe unknown routes and no API calls",
+          "synthetic edit, cancel, create, validation, reload and reset",
+          "contacts link to accounts and related lists stay scoped",
+          "theme, language and RTL mobile drawer remain usable",
+          "blocked storage falls back and connected page remains reachable",
+          "long sample text, forms and evidence fit desktop and mobile in both themes",
+          "leaving the connected route returns to a credential-free preview and requires reconnect",
+          "pending connected reads cannot dispatch follow-up requests inside preview",
+          "primary save button retains AA contrast on hover in both themes",
+          "light is the default even when the browser prefers dark",
+          "observed sidebar groups expose supported records and disable planned destinations"
+        ],
+        "observedRequired": [
+          "routed frame has evidence, history, safe unknown routes and no API calls",
+          "synthetic edit, cancel, create, validation, reload and reset",
+          "contacts link to accounts and related lists stay scoped",
+          "theme, language and RTL mobile drawer remain usable",
+          "blocked storage falls back and connected page remains reachable",
+          "long sample text, forms and evidence fit desktop and mobile in both themes",
+          "leaving the connected route returns to a credential-free preview and requires reconnect",
+          "pending connected reads cannot dispatch follow-up requests inside preview",
+          "primary save button retains AA contrast on hover in both themes",
+          "light is the default even when the browser prefers dark",
+          "observed sidebar groups expose supported records and disable planned destinations"
+        ],
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": "2026-11-11T23:24:55.690Z",
+      "finishedAt": "2026-11-11T23:25:01.489Z"
+    },
+    {
+      "id": "cleanup",
+      "outcome": "passed",
+      "coverage": {
+        "expected": [
+          "cleanup/records",
+          "cleanup/processes"
+        ],
+        "observedRequired": [
+          "cleanup/records",
+          "cleanup/processes"
+        ],
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "allowedSkipped": []
+      },
+      "categories": [],
+      "startedAt": null,
+      "finishedAt": null
+    }
+  ],
+  "cleanup": {
+    "verified": true,
+    "records": 43,
+    "unknownIntents": 0,
+    "retainedPrincipals": true,
+    "processesStopped": true
+  },
+  "evidence": [
+    {
+      "gate": "database",
+      "sha256": "492264c842b275107b4e74ea237ad0b6945c49c074d53d724c47a08034c64f5a"
+    },
+    {
+      "gate": "lab",
+      "sha256": "79cdea18d9c877df14985aef2f7ec6527bdf61136c3c69558681cbbb68705314"
+    },
+    {
+      "gate": "web",
+      "sha256": "b90b781797fe569bc4b234ddc32326940fc311e6f9b6a938607a0f9f09952ee1"
+    },
+    {
+      "gate": "jsforce",
+      "sha256": "2555946b4d681b986351e28cf865554a10f9033cb16a51747805cbb6320f89fa"
+    },
+    {
+      "gate": "python",
+      "sha256": "452ff2fc3d6f30953e81b81e02918518a96e533d37e0fa65cd462acb8bb8c8e9"
+    },
+    {
+      "gate": "cli",
+      "sha256": "1fcf66c5962c9463b7cf0b2ce3726030fd96a41e802d587275b676e33dd1fa23"
+    },
+    {
+      "gate": "oauth",
+      "sha256": "ca8596f20888b5b3aca554df957a3512592b7d23558e925945bbb8b4c4ea0493"
+    },
+    {
+      "gate": "schema",
+      "sha256": "4a8295375e2d6150f660e55586bc687ee31507392b61e477b92d702776944415"
+    },
+    {
+      "gate": "restart",
+      "sha256": "d46d9f498b5a9721e13eabf524b9d660e7022320db41ef93ad9fefd8af17f23c"
+    },
+    {
+      "gate": "connected-browser",
+      "sha256": "10e6cd3e29da39bc81b42ad4b29b257f15fe35de7fa0267e5142ffb7f15ba047"
+    },
+    {
+      "gate": "preview",
+      "sha256": "98ef7c8c61b8af550f49b657075cc05898b7a5df1f14eafd27d1c7522089cce1"
+    }
+  ]
+}

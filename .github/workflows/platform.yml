@@ -6,7 +6,8 @@ permissions:
   contents: read
 jobs:
   candidate:
-    runs-on: ubuntu-latest
+    # Keep the inherited Playwright 1.56.1 browser suite on a supported OS.
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     services:
       postgres:

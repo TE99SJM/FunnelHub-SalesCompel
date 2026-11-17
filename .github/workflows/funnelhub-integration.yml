@@ -1,0 +1,54 @@
+name: FunnelHub isolated integration
+on:
+  pull_request:
+  push:
+    branches: [integration/funnelhub]
+permissions:
+  contents: read
+jobs:
+  integration:
+    # Playwright 1.56.1 does not support the new ubuntu-latest 26.04 image.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      migration_db:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_DB: funnelhub_migration
+          POSTGRES_PASSWORD: synthetic-ci-only
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd "pg_isready -U postgres -d funnelhub_migration"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r modules/funnelhub/backend/requirements.lock
+      - name: Reused providers and integration regressions (mocks only)
+        working-directory: modules/funnelhub/backend
+        env:
+          FUNNELHUB_MIGRATION_TEST_URL: postgresql+psycopg://postgres:synthetic-ci-only@127.0.0.1:${{ job.services.migration_db.ports[5432] }}/funnelhub_migration
+        run: python -m pytest -q --junitxml=/tmp/fh-results/backend.xml
+      - run: npm ci --prefix web --ignore-scripts
+      - run: node web/node_modules/playwright/cli.js install --with-deps chromium webkit
+      - run: python scripts/funnelhub/prepare_env.py
+        id: test_env
+      - name: Build and start separate Docker stack
+        run: docker compose -p funnelhub-salescompel-test -f compose.test.yml up -d --build --wait --wait-timeout 240
+      - name: Browser, API, database and container restart acceptance
+        run: python scripts/funnelhub/acceptance_stack.py --disposable-test-stack --browser-script scripts/funnelhub/browser_acceptance.cjs --restart --out /tmp/fh-results/stack.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: funnelhub-test-results
+          path: /tmp/fh-results
+          if-no-files-found: warn
+      - name: Remove only this runner's disposable test stack
+        if: always() && steps.test_env.outcome == 'success'
+        run: docker compose -p funnelhub-salescompel-test -f compose.test.yml down -v

@@ -1,0 +1,33 @@
+{
+  "revision": "c6d758e4dfd3ca28d8f3e54882fb816d81dd5666",
+  "run_url": "https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/44006442675",
+  "job_id": 133782841940,
+  "status": "success",
+  "backend_tests": 109,
+  "provider_responses": "mocked",
+  "source_snapshots": "synthetic",
+  "acceptance": [
+    "empty test stack",
+    "owner setup",
+    "external actions disabled",
+    "SalesCompel account create",
+    "SalesCompel account edit",
+    "contact create",
+    "shared CRM contact/account",
+    "persistent multipart upload",
+    "draft save",
+    "browser chromium-desktop",
+    "browser webkit-iphone",
+    "desktop and iPhone WebKit browsers",
+    "login survives restart",
+    "CRM survives restart",
+    "draft survives restart",
+    "media survives restart"
+  ],
+  "artifact": {
+    "id": 14293849950,
+    "digest": "sha256:6c3214c63e6835de117cb22cae6476540a1080e816e6e54cf0bc40b3e1f5ca0c"
+  },
+  "production_accessed": false,
+  "physical_iphone_tested": false
+}

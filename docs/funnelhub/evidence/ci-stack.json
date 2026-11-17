@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "checks": [
+    "empty test stack",
+    "owner setup",
+    "external actions disabled",
+    "SalesCompel account create",
+    "SalesCompel account edit",
+    "contact create",
+    "shared CRM contact/account",
+    "persistent multipart upload",
+    "draft save",
+    "desktop and iPhone WebKit browsers",
+    "login survives restart",
+    "CRM survives restart",
+    "draft survives restart",
+    "media survives restart"
+  ],
+  "live_providers_tested": false,
+  "physical_iphone_tested": false,
+  "source_commit": "bb5725368b89b45546efd775663530e318dfcdf7",
+  "workflow_run": 43119845798
+}

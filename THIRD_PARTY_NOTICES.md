@@ -16,3 +16,7 @@ copied or modified in this repository.
 Its required indirect Go dependency `golang.org/x/sys` is pinned to v0.36.0
 (https://pkg.go.dev/golang.org/x/sys@v0.36.0), under the BSD 3-Clause license;
 copyright The Go Authors. Original notices remain in the module distribution.
+
+## FunnelHub module
+
+See [provenance](modules/funnelhub/PROVENANCE.md) for the pinned source, original paths, owner-authorized reuse, modifications and unresolved general redistribution license.
