@@ -1,0 +1,28 @@
+{
+  "revision": "c6d758e4dfd3ca28d8f3e54882fb816d81dd5666",
+  "workflows": [
+    {
+      "id": 44006442675,
+      "name": "FunnelHub isolated integration",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/44006442675"
+    },
+    {
+      "id": 44006442661,
+      "name": "Compatibility laboratory (not parity certification)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/44006442661"
+    },
+    {
+      "id": 44006442667,
+      "name": "Platform candidate (not parity certification)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/44006442667"
+    }
+  ],
+  "live_provider_validation": false,
+  "production_deployed": false
+}

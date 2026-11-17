@@ -6,7 +6,8 @@
 2. Test the separate stack on mserver and on a physical iPhone. Verify owner setup, native Files/Photos selection, large MOV uploads, touch layout, restart and no interference with the existing container. A browser-emulated iPhone is not a physical-device test.
 3. Reconnect sandbox/test providers and verify actual grants. Existing tests mock external API/IMAP responses. YouTube/TikTok/Meta app reviews, scopes, quota, account eligibility and OAuth redirect correctness remain unverified. No live Gmail or Square account was accessed.
 4. Rehearse a versioned production importer and reconciliation/restore procedure. Version 1 now supports offline import into a new rehearsal-only PostgreSQL schema, credential re-encryption, reconciliation and guarded rollback. Real-snapshot rehearsal, application promotion and backup/restore remain unverified; no production token/data migration is complete.
-5. Confirm redistribution licensing for owner-supplied FunnelHub source. No source license exists at the inspected revision. Owner-authorized reuse is recorded; a general redistribution grant is not invented.
+5. Review and update vulnerable JavaScript dependency chains before public exposure. The current lockfile audit reports 5 high findings in upstream Vue i18n dependencies, and 1 high/3 moderate findings in the unified React Vite/esbuild/router chains. Counts include dependency propagation, not distinct exploitable bugs. Exploitability has not been established. Docker serves the built React assets through FastAPI and does not ship the Vue frontend or run Vite, but the router is part of the React bundle. Updates and regression testing remain required; see `evidence/npm-audit.json`.
+6. Confirm redistribution licensing for owner-supplied FunnelHub source. No source license exists at the inspected revision. Owner-authorized reuse is recorded; a general redistribution grant is not invented.
 
 ## Functional limits
 
