@@ -90,3 +90,13 @@ The optional `--provider-suite` local harness runs all 83 mocked provider/backen
 ## Upstream full candidate acceptance
 
 [SalesCompel full candidate workflow](https://github.com/TE99SJM/FunnelHub-SalesCompel/actions/runs/43118861782) passed at revision `087ed5b4dae4c0a76fdcfb8ceeee4c9e80f7a374`. Its sanitized native report is retained as `evidence/salescompel-candidate-ci.json`. Passed gates cover database/vet, offline laboratory, original Vue build/units, JSforce, simple-salesforce, Salesforce CLI against the local candidate, OAuth, dynamic schema, restart, connected browser, synthetic preview and cleanup. Six deliberate offline-suite skips are covered by the separate required candidate-client gates. The report's counts include subtests and non-test gates; do not sum them into an inflated test count. This is candidate acceptance, not proof of parity with a live Salesforce reference organization.
+
+## Offline migration rehearsal (version 1)
+
+The backend suite now contains 109 checks: the existing 83 plus 26 migration cases. All 109 passed locally with a disposable PostgreSQL 17.12 database available for the four PostgreSQL migration cases; ordinary backend/provider fixtures still use temporary SQLite and mocked provider responses. Without `FUNNELHUB_MIGRATION_TEST_URL`, those four cases are explicitly skipped, not reported as verified. CI supplies a dedicated disposable PostgreSQL service and retains JUnit results alongside Docker/browser artifacts.
+
+Coverage includes CLI apply, exact ID/relationship preservation, password-hash verification, source hash unchanged, PostgreSQL sequence positions, media original/derivative hashes, private file modes, default reconnect and optional token re-encryption, transient OAuth state removal, notification/publication/projection holds, duplicate-provider refusal, safe repeated-import refusal, per-table reconciliation, complete rollback and refusal to discard modified data/files/schema. An injected media change rolls back schema creation and leaves private staging files for inspection. An external foreign key proves rollback does not cascade into another schema.
+
+The run also exposed a pre-existing test timezone assumption: Rumble snapshot history is stored by UTC date while the test used local date. The assertion now uses UTC to match runtime behavior; no provider/runtime behavior was changed for that repair.
+
+The source snapshot is synthetic. No production volume, real credential, live provider or mserver deployment is part of these results. Full backup/restore and reviewed activation remain release gates. See `MIGRATION.md` for commands and interruption handling.

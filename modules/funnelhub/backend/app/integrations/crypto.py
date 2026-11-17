@@ -9,9 +9,14 @@ from ..config import settings
 from ..redaction import protect
 
 
-def _fernet() -> Fernet:
-    key = base64.urlsafe_b64encode(hashlib.sha256(f"integrations:{settings.secret_key}".encode()).digest())
+def fernet_for_key(secret_key: str) -> Fernet:
+    """Shared cipher derivation for runtime credentials and offline re-encryption."""
+    key = base64.urlsafe_b64encode(hashlib.sha256(f"integrations:{secret_key}".encode()).digest())
     return Fernet(key)
+
+
+def _fernet() -> Fernet:
+    return fernet_for_key(settings.secret_key)
 
 
 def encrypt_secrets(data: dict) -> str:

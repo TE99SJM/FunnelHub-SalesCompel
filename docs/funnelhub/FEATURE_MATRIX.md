@@ -23,13 +23,13 @@
 | Automation builder | Planned | Periodic sync and scheduled publication only | Label workflow builder as planned; retain real scheduler status |
 | Secrets | Hashed/segregated CRM identities | Fernet integration secrets; browser bearer token | Server-only CRM principal; preserve key securely; browser session hardening pending |
 | Docker | No turnkey production stack in inspected root | Single container + persistent SQLite/media volume | Isolated PostgreSQL + app + one-shot initializer; Docker startup/restart passed in CI; mserver pending |
-| Production migration | Planned | Additive startup migrations | Assessment/dry-run only; no production import or credential copy |
+| Production migration | Planned | Additive startup migrations | Offline rehearsal importer/reconciliation/rollback implemented; no production import |
 
 The source baseline initially failed seven tests because this execution environment sets a SOCKS proxy but the optional HTTPX socks dependency was missing. Installing socksio resolved all seven; they are not presented as product bug fixes. See TESTING.md for final executed checks and known gaps.
 
 ## Completed integration evidence
 
-The added adapter, account UI, transactional contact projection, media library, native file-input control, durable composer drafts, private media route, test publication gates, Compose files, read-only migration assessor and documentation are implemented. Actual PostgreSQL API/restart acceptance passes; integrated provider/regression tests pass (83), and unchanged SalesCompel Go tests pass (572). Desktop/WebKit emulation and Docker startup/restart passed in CI; physical iPhone and mserver remain pending. See TESTING.md and KNOWN_ISSUES.md for exact boundaries.
+The added adapter, account UI, transactional contact projection, media library, native file-input control, durable composer drafts, private media route, test publication gates, Compose files, read-only migration assessor, offline rehearsal importer and documentation are implemented. Actual PostgreSQL API/restart acceptance passes; the earlier integrated provider/regression suite passed (83); the extended backend suite now passes 109 checks, including 26 migration cases, and unchanged SalesCompel Go tests pass (572). Desktop/WebKit emulation and Docker startup/restart passed in CI; physical iPhone and mserver remain pending. See TESTING.md and KNOWN_ISSUES.md for exact boundaries.
 
 ## Acceptance classification
 
@@ -44,6 +44,6 @@ The added adapter, account UI, transactional contact projection, media library, 
 | Gmail | No | Mock-tested IMAP reads and contact links | Existing reader retained | Live authorized account validation | Gmail OAuth and send/reply |
 | Square | No | Mock-tested customer/order/payment reads | Existing adapter retained; contacts project to CRM | Sandbox read-only validation | Product/inventory editor |
 | Website analytics | No | Mock-tested GA4 per-site/history | Existing reports exposed in unified navigation | Real-property validation | First-party tracker; dedicated referral UI |
-| Deployment/migration | No turnkey stack | Existing SQLite deployment | Separate Compose stack and dry-run assessor added | Physical device/server acceptance; restore rehearsal | Production importer |
+| Deployment/migration | No turnkey stack | Existing SQLite deployment | Separate Compose stack, assessor and offline rehearsal importer added | Real-snapshot/restore rehearsal; physical device/server acceptance | Production promotion/activation |
 
 No provider is classified as production-ready solely because its mocked tests pass. Production readiness requires the live/sandbox and deployment gates listed above.

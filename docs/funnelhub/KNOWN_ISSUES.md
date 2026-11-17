@@ -5,7 +5,7 @@
 1. Agree the production acceptance checklist before merging. The integrated Docker, desktop/WebKit (including composer width) and restart checks passed, as did SalesCompel's full candidate acceptance. Reference-org parity is not certified; synthetic checks do not establish real provider authorization.
 2. Test the separate stack on mserver and on a physical iPhone. Verify owner setup, native Files/Photos selection, large MOV uploads, touch layout, restart and no interference with the existing container. A browser-emulated iPhone is not a physical-device test.
 3. Reconnect sandbox/test providers and verify actual grants. Existing tests mock external API/IMAP responses. YouTube/TikTok/Meta app reviews, scopes, quota, account eligibility and OAuth redirect correctness remain unverified. No live Gmail or Square account was accessed.
-4. Rehearse a versioned production importer and reconciliation/restore procedure. Only a read-only assessment tool exists. No production token/data migration is complete.
+4. Rehearse a versioned production importer and reconciliation/restore procedure. Version 1 now supports offline import into a new rehearsal-only PostgreSQL schema, credential re-encryption, reconciliation and guarded rollback. Real-snapshot rehearsal, application promotion and backup/restore remain unverified; no production token/data migration is complete.
 5. Confirm redistribution licensing for owner-supplied FunnelHub source. No source license exists at the inspected revision. Owner-authorized reuse is recorded; a general redistribution grant is not invented.
 
 ## Functional limits
@@ -27,7 +27,7 @@
 ## Prioritized development after release blockers
 
 1. Reliable large-file and physical iPhone publishing workflows, including upload cancellation/retry and provider-specific media validation.
-2. Complete migration importer, conflict reconciliation and restore tests, with private token re-encryption.
+2. Extend the rehearsal importer with real-data conflict reconciliation, reviewed promotion/activation and full backup/restore tests.
 3. Per-user identity/authorization, secure sessions and distributed scheduler leases if multiple users/workers are needed.
 4. Broader CRM fields, Opportunities/pipeline adapters, pagination and deterministic company identity mapping.
 5. Square product/inventory read views, GA4 traffic-source reporting, then explicitly authorized Gmail send/reply workflows.

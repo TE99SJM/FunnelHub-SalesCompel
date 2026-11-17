@@ -1,6 +1,6 @@
 """Views: Rumble videos page, Twitch clips, lifetime totals, daily history and views gained."""
 import json
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import httpx
@@ -25,6 +25,8 @@ def test_parse_rumble_page():
 
 def test_rumble_sync_reads_video_views(auth, monkeypatch):
     seen = []
+    # Historical snapshots use UTC days, regardless of the developer's timezone.
+    today = datetime.now(timezone.utc).date()
 
     def handler(req):
         seen.append(str(req.url))
@@ -46,10 +48,10 @@ def test_rumble_sync_reads_video_views(auth, monkeypatch):
     assert any("page=2" in u for u in seen)
     ch = auth.get("/api/channels").json()[0]
     assert ch["total_views"] == expected and ch["views"] == expected and ch["followers"] > 1000
-    d = auth.get(f"/api/dashboard?start={date.today() - timedelta(days=29)}&end={date.today()}").json()
+    d = auth.get(f"/api/dashboard?start={today - timedelta(days=29)}&end={today}").json()
     assert d["kpis"]["views_lifetime"] == expected
     # first day of history: nothing from before the period yet
-    assert d["kpis"]["views_gained"] is None and d["kpis"]["views_history_since"] == date.today().isoformat()
+    assert d["kpis"]["views_gained"] is None and d["kpis"]["views_history_since"] == today.isoformat()
     a = auth.get("/api/dashboard").json()
     assert a["kpis"]["views_gained"] == expected
 

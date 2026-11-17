@@ -42,3 +42,7 @@ SalesCompel's Apache license and notices are retained. FunnelHub has no declared
 ## Release gate
 
 Keep the integration PR in draft until PostgreSQL/runtime/browser tests, Docker build/restart, real mobile picker, provider sandboxes, migration rehearsal and server isolation checks pass. Tests skipped for environmental reasons are not passes.
+
+## Offline migration boundary
+
+The version 1 importer reuses FunnelHub model metadata and cipher derivation. It creates only a new `fh_rehearsal_*` PostgreSQL schema and a new private media directory, journals source fingerprints/stable IDs/content hashes, holds publication and CRM projection, and disables integrations/notifications. There is no new application service or database in the deployment architecture. A disposable PostgreSQL CI service exercises import and rollback independently of the running acceptance stack. Promotion into `funnelhub` is a separate, unimplemented approval gate; see MIGRATION.md.

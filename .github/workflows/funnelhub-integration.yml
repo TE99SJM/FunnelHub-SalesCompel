@@ -9,6 +9,17 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    services:
+      migration_db:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_DB: funnelhub_migration
+          POSTGRES_PASSWORD: synthetic-ci-only
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd "pg_isready -U postgres -d funnelhub_migration"
+          --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -20,7 +31,9 @@ jobs:
       - run: pip install -r modules/funnelhub/backend/requirements.lock
       - name: Reused providers and integration regressions (mocks only)
         working-directory: modules/funnelhub/backend
-        run: python -m pytest -q
+        env:
+          FUNNELHUB_MIGRATION_TEST_URL: postgresql+psycopg://postgres:synthetic-ci-only@127.0.0.1:${{ job.services.migration_db.ports[5432] }}/funnelhub_migration
+        run: python -m pytest -q --junitxml=/tmp/fh-results/backend.xml
       - run: npm ci --prefix web --ignore-scripts
       - run: node web/node_modules/playwright/cli.js install --with-deps chromium webkit
       - run: python scripts/funnelhub/prepare_env.py

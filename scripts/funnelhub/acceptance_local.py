@@ -101,6 +101,7 @@ with tempfile.TemporaryDirectory(prefix="funnelhub-acceptance-") as tmp:
 
         if args.provider_suite:
             test_env = dict(app_env, FUNNELHUB_TEST_DATABASE_URL=app_env["DATABASE_URL"],
+                            FUNNELHUB_MIGRATION_TEST_URL=env["MIGRATION_DATABASE_URL"].replace("postgresql://", "postgresql+psycopg://", 1),
                             SALESCOMPEL_URL="", SALESCOMPEL_TOKEN="", ALLOW_DEMO_SEED="true")
             result = subprocess.run([sys.executable, "-m", "pytest", "-q"],
                                     cwd=ROOT / "modules/funnelhub/backend", env=test_env,
