@@ -7,7 +7,8 @@ permissions:
   contents: read
 jobs:
   integration:
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 does not support the new ubuntu-latest 26.04 image.
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     services:
       migration_db:
@@ -37,6 +38,7 @@ jobs:
       - run: npm ci --prefix web --ignore-scripts
       - run: node web/node_modules/playwright/cli.js install --with-deps chromium webkit
       - run: python scripts/funnelhub/prepare_env.py
+        id: test_env
       - name: Build and start separate Docker stack
         run: docker compose -p funnelhub-salescompel-test -f compose.test.yml up -d --build --wait --wait-timeout 240
       - name: Browser, API, database and container restart acceptance
@@ -48,5 +50,5 @@ jobs:
           path: /tmp/fh-results
           if-no-files-found: warn
       - name: Remove only this runner's disposable test stack
-        if: always()
+        if: always() && steps.test_env.outcome == 'success'
         run: docker compose -p funnelhub-salescompel-test -f compose.test.yml down -v
